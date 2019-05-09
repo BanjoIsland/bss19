@@ -1,0 +1,50 @@
+//
+// Created by Lasciel on 8/10/2016.
+//
+
+#ifndef PUZZLETEMPLATE_CONFIG_H
+#define PUZZLETEMPLATE_CONFIG_H
+
+#define LCD_LINE_LENGTH 16
+#define LCD_LINE_BUFFER_LENGTH LCD_LINE_LENGTH + 1
+#define LCD_LINES 2
+#define DEFAULT_LCD_SCREEN_UPDATE 2000
+
+// puzzle byte offsets
+#define PUZZLE_NUM DUCKOS
+#define PUZZLE_DATA_SIZE 2
+#define PUZZLE_TRIES_BYTE PUZZLE_NUM * PUZZLE_DATA_SIZE + 0
+#define PUZZLE_COMPLETE_BYTE PUZZLE_NUM * PUZZLE_DATA_SIZE + 1
+
+// blocks for other stuff
+#define NAME_RFID_BLOCK 8
+#define DATA_RFID_BLOCK 12
+
+#define KISSKISS 0
+#define DUCKOS 1
+#define PERPETUAL 2
+#define LIFEFORCE 3
+#define THERMO 4
+#define WALL 5
+#define TBD 6
+
+// putting these at the end! They are global paragon=present, renegade=past
+#define RENEGADE_CHOICE_COUNT_BYTE 14
+#define PARAGON_CHOICE_COUNT_BYTE 15
+
+#define IDLE_DEMO_TIME 50000UL
+#define IDLE_OFF_TIME 1000UL
+#define VICTORY_TIME 4000UL
+
+#define WATCHDOG_TIMEOUT 15000UL
+
+#define GAME_TICK_RATE 100
+
+#define LED_FLASH_RATE 500UL
+
+//#define PUZZLE_GAME_SPATIAL
+#define PUZZLE_GAME_PASSWORD
+#define PASSWORD_LENGTH 1
+#define PUZZLE_PASSWORD "7"
+
+#endif //PUZZLETEMPLATE_CONFIG_H
