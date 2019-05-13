@@ -17,7 +17,7 @@
 #define UP_LEFT 8
 
 
-void joySetup();
+void joySetup(bool mode);
 
 void joyRead();
 

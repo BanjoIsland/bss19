@@ -1,19 +1,17 @@
 /*
-  Gametech, pilot navigator controller
+  Gametech, pilot demolitions officer controller
   Author: Ryan Williams
   Revised: 5.12.2019
 */
 
-#include "joystick.h"
 #include "humidity.h"
-#include "sliders.h"
+#include "buttons.h"
 #include "led.h"
 
-const uint8_t CONSOLE_ID = 0x00;
+const uint8_t CONSOLE_ID = 0x01;
 enum States {IDLING, TRYHARD_A, TRYHARD_B, TRYHARD_C, SUCCESS};
 
-bool debug_mode = false
-;
+bool debug_mode = false;
 
 void run_mode();
 void read_serial();
@@ -22,10 +20,11 @@ volatile enum States state = IDLING;
 
 void setup() {
   Serial.begin(9600);
-  joySetup(debug_mode);
-  humSetup(debug_mode);
-  slider_setup(debug_mode);
+  humSetup();
+  butSetup();
+  ledSetup();
 }
+
 
 void loop() {
   run_mode();
@@ -38,31 +37,29 @@ void run_mode() {
   {
     case IDLING:
       break;
-    case TRYHARD_A:       // Joystick behavior
-      if (debug_mode) Serial.println("Joystick state");
-      joySetSequence(2);
-      if (joyUpdate()) {
-        state = SUCCESS;
-      }
-      break;
-    case TRYHARD_B:       // Humidity behavior
-      if (debug_mode) Serial.println("Humidity state");
+    case TRYHARD_A:       // humidity check
       if (humCheck()) {
         state = SUCCESS;
       }
       break;
-    case TRYHARD_C:       // Slider behavior
-      if (debug_mode) Serial.println("Slider state");
-      slider_set_sequence(1);
-      if (slider_check()) {
+    case TRYHARD_B:       // button check
+      if (butCheck()) {
         state = SUCCESS;
       }
       break;
+    case TRYHARD_C:       // switch check
+      if (swCheck()) {
+        state = SUCCESS;   
+      }
+      break;
     case SUCCESS:
-      Serial.write((byte)0xFF);
+      Serial.write((byte) 0xFF);
       if (debug_mode) Serial.println("I won");
       state = IDLING;
+      setFlashCount(3);
+      ledSetState(LED_FLASH_GREEN);
       break;
+      
   }
 }
 

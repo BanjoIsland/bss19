@@ -13,7 +13,7 @@ int joySeq3[] = {UP, CENTER, UP, CENTER, DOWN, CENTER, DOWN, CENTER,
 
 uint16_t joySeqSelected = 0;
 int joySeqIterator = 0;
-
+bool debug_joy = false;
 int joyCurrentPos = CENTER;
 
 struct joySeqStruct
@@ -30,7 +30,8 @@ joySeqStruct joySeqMatrix[] =
 };
 
 
-void joySetup() {
+void joySetup(bool mode) {
+  debug_joy = mode;
   pinMode(UP_PIN, INPUT_PULLUP);
   pinMode(RIGHT_PIN, INPUT_PULLUP);
   pinMode(DOWN_PIN, INPUT_PULLUP);
@@ -84,10 +85,6 @@ bool joyUpdate() {
   }
 }
 
-void joyCompare() {
-
-}
-
 bool joyCheckSequence() {
   
   if (joyCurrentPos == joySeqMatrix[joySeqSelected].joySeq[joySeqIterator]) {
@@ -102,4 +99,3 @@ bool joyCheckSequence() {
     return false;
   }
 }
-
