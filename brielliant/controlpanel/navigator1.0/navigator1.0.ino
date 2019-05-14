@@ -38,20 +38,20 @@ void run_mode() {
   {
     case IDLING:
       break;
-    case TRYHARD_A:       // Joystick behavior
+    case TRYHARD_A:       // Joystick check
       if (debug_mode) Serial.println("Joystick state");
       joySetSequence(2);
       if (joyUpdate()) {
         state = SUCCESS;
       }
       break;
-    case TRYHARD_B:       // Humidity behavior
+    case TRYHARD_B:       /// humidity check needs basepoint set in read_serial
       if (debug_mode) Serial.println("Humidity state");
       if (humCheck()) {
         state = SUCCESS;
       }
       break;
-    case TRYHARD_C:       // Slider behavior
+    case TRYHARD_C:       // Slider check
       if (debug_mode) Serial.println("Slider state");
       slider_set_sequence(1);
       if (slider_check()) {
@@ -100,6 +100,7 @@ void read_serial() {
       break;
     case 0x11:
       if (debug_mode) Serial.println("going to case B");
+      humSetBasePt();
       state = TRYHARD_B;
       break;
     case 0x12:

@@ -37,7 +37,7 @@ void run_mode() {
   {
     case IDLING:
       break;
-    case TRYHARD_A:       // humidity check
+    case TRYHARD_A:       // humidity check needs basepoint set in read_serial
       if (humCheck()) {
         state = SUCCESS;
       }
@@ -93,6 +93,7 @@ void read_serial() {
       break;
     case 0x10:
       if (debug_mode) Serial.println("going to case A");
+      humSetBasePt();
       state = TRYHARD_A;
       break;
     case 0x11:
