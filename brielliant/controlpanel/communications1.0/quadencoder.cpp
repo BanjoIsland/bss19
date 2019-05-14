@@ -1,9 +1,9 @@
 #include <Arduino.h>
 #include "quadencoder.h"
 
-uint8_t QEM [16] = {0,-1,1,0,1,0,0,-1,-1,0,0,1,0,1,-1,0}; // Quadrature Encoder Matrix
-uint8_t prev = 0;
-uint8_t now = 0;
+int QEM [16] = {0,-1,1,0,1,0,0,-1,-1,0,0,1,0,1,-1,0}; // Quadrature Encoder Matrix
+int prev = 0;
+int now = 0;
 int count = 0;
 int target_count = 0xFFFF;
 bool debug_encoder;
