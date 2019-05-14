@@ -1,4 +1,4 @@
-#include "Arduino.h"
+#include <Arduino.h>
 #include "ultrasonic.h"
 
 bool debug_ultra = false;
@@ -24,8 +24,8 @@ int ultraDistance() {
   // Calculating the distance in cm
   distance= duration*0.034/2;
   // Prints the distance on the Serial Monitor
-  //Serial.print("Distance: ");
-  //Serial.println(distance);
+  if (debug_ultra) Serial.print("Distance: ");
+  if (debug_ultra) Serial.println(distance);
   return distance;
 }
 

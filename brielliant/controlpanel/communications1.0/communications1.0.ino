@@ -1,7 +1,7 @@
 /*
-  Gametech, pilot demolitions officer controller
+  BSS19 Gametech, communications officer controller v1.0
   Author: Ryan Williams
-  Revised: 5.12.2019
+  Revised: 5.13.2019
 */
 
 #include "humidity.h"
@@ -48,12 +48,13 @@ void run_mode() {
       }
       break;
     case TRYHARD_B:       // humidity state 
-      if (true) {
+      if (humCheck()) {
         state = SUCCESS;
       }
       break;
     case TRYHARD_C:       // quad encoder state
-      if (true) {
+      set_encoder_count(6);
+      if (encoder_check()) {
         state = SUCCESS;   
       }
       break;
@@ -112,6 +113,10 @@ void read_serial() {
     case 0x12:
       if (debug_mode) Serial.println("going to case C");
       state = TRYHARD_C;
+      break;
+    case 0x13:
+      if (debug_mode) Serial.println("going to case D");
+      state = TRYHARD_D;
       break;
   }
 }
