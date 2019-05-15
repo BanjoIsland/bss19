@@ -52,7 +52,7 @@ void read_serial() {
     } else if (incoming_byte == (byte) 0xAA) {
     } else {
       long rn = random(10000);
-      if (random % 2 == 0) {   // CONTROL PROBABILITY WITH MODULUS
+      if (rn % 2 == 0) {   // CONTROL PROBABILITY WITH MODULUS
       }
         delay (1000);
         Serial.write((byte) 0xFF);
