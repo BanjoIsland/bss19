@@ -26,6 +26,14 @@ bool butCheck() {
   }
 }
 
+bool red_check() {
+  int red_state = digitalRead(RED_PIN);
+  if (red_state) {
+    return true;
+  }
+  return false;
+}
+
 bool swCheck() {
   int sw1State = digitalRead(SW1_PIN);
   int sw2State = digitalRead(SW2_PIN);
@@ -37,4 +45,3 @@ bool swCheck() {
     return false;
   }  
 }
-

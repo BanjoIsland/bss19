@@ -41,27 +41,22 @@ void run_mode() {
   {
     case IDLING:
       break;
-    case TRYHARD_A:       // dip state
-      set_dip_target(1);
-      if (check_dip()) {
-        state = SUCCESS;
-      }
-      break;
-    case TRYHARD_B:       // humidity check needs basepoint set in read_serial 
+    case TRYHARD_A:       // humidity check needs basepoint set in read_serial 
       if (humCheck()) {
         state = SUCCESS;
       }
       break;
-    case TRYHARD_C:       // quad encoder state
-      set_encoder_count(6);
+    case TRYHARD_B:       // Encoder state, increment set in read_serial
       if (encoder_check()) {
-        state = SUCCESS;   
+        state = SUCCESS;
       }
       break;
-    case TRYHARD_D:       // ultrasonic state
+    case TRYHARD_C:       // ultrasonic state
       if (ultraCheck()) {
         state = SUCCESS;  
       }
+      break;
+    case TRYHARD_D:       
       break;
     case SUCCESS:
       Serial.write((byte) 0xFF);
@@ -103,21 +98,18 @@ void read_serial() {
       state = IDLING;             //TODO: Think about possible consequences of this
       break;
     case 0x10:
-      if (debug_mode) Serial.println("going to case A");
+      if (debug_mode) Serial.println("The drill is overheating / humidity");
+      humSetBasePt();      
       state = TRYHARD_A;
       break;
     case 0x11:
-      if (debug_mode) Serial.println("going to case B");
-      humSetBasePt();
+      if (debug_mode) Serial.println("drill stuck in ring / knob 5 clicks right (1/4 turn)");
+      set_encoder_count(5);
       state = TRYHARD_B;
       break;
-    case 0x12:
-      if (debug_mode) Serial.println("going to case C");
-      state = TRYHARD_C;
-      break;
     case 0x13:
-      if (debug_mode) Serial.println("going to case D");
-      state = TRYHARD_D;
+      if (debug_mode) Serial.println("drill is leaking / cover ultrasonic");
+      state = TRYHARD_C;
       break;
   }
 }

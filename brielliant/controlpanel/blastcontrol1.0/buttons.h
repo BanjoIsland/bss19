@@ -15,6 +15,8 @@ void butSetup();
 
 bool butCheck();
 
+bool red_check();
+
 bool swCheck();
 
 #endif

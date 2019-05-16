@@ -38,16 +38,15 @@ void run_mode() {
   {
     case IDLING:
       break;
-    case TRYHARD_A:       // Joystick check
-      if (debug_mode) Serial.println("Joystick state");
-      joySetSequence(2);
-      if (joyUpdate()) {
+    case TRYHARD_A:       /// humidity check needs basepoint set in read_serial
+      if (debug_mode) Serial.println("Humidity state");
+      if (humCheck()) {
         state = SUCCESS;
       }
       break;
-    case TRYHARD_B:       /// humidity check needs basepoint set in read_serial
-      if (debug_mode) Serial.println("Humidity state");
-      if (humCheck()) {
+    case TRYHARD_B:       // Joystick check
+      if (debug_mode) Serial.println("Joystick state");
+      if (joyUpdate()) {
         state = SUCCESS;
       }
       break;
@@ -59,9 +58,11 @@ void run_mode() {
       }
       break;
     case SUCCESS:
-      Serial.write((byte)0xFF);
+      Serial.write((byte) 0xFF);
       if (debug_mode) Serial.println("I won");
       state = IDLING;
+      setFlashCount(3);
+      ledSetState(LED_FLASH_GREEN);
       break;
   }
 }
@@ -95,17 +96,14 @@ void read_serial() {
       state = IDLING;             //TODO: Think about possible consequences of this
       break;
     case 0x10:
-      if (debug_mode) Serial.println("going to case A");
+      if (debug_mode) Serial.println("The drill is overheating / humidity");
+      humSetBasePt();
       state = TRYHARD_A;
       break;
-    case 0x11:
-      if (debug_mode) Serial.println("going to case B");
-      humSetBasePt();
-      state = TRYHARD_B;
-      break;
     case 0x12:
-      if (debug_mode) Serial.println("going to case C");
-      state = TRYHARD_C;
+      if (debug_mode) Serial.println("Hit hard cheese / Joystick LRLRLR");
+      joySetSequence(1);
+      state = TRYHARD_B;
       break;
   }
 }

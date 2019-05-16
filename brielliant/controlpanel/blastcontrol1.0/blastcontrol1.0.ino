@@ -42,8 +42,8 @@ void run_mode() {
         state = SUCCESS;
       }
       break;
-    case TRYHARD_B:       // button check
-      if (butCheck()) {
+    case TRYHARD_B:       // button check "B4"
+      if (red_check()) {
         state = SUCCESS;
       }
       break;
@@ -92,17 +92,13 @@ void read_serial() {
       state = IDLING;             //TODO: Think about possible consequences of this
       break;
     case 0x10:
-      if (debug_mode) Serial.println("going to case A");
+      if (debug_mode) Serial.println("drill is overheating / humidity");
       humSetBasePt();
       state = TRYHARD_A;
       break;
     case 0x11:
-      if (debug_mode) Serial.println("going to case B");
+      if (debug_mode) Serial.println("drill is stuck in rind / red button");
       state = TRYHARD_B;
-      break;
-    case 0x12:
-      if (debug_mode) Serial.println("going to case C");
-      state = TRYHARD_C;
       break;
   }
 }
