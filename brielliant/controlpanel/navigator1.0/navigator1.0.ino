@@ -10,10 +10,9 @@
 #include "led.h"
 
 const uint8_t CONSOLE_ID = 0x00;
-enum States {IDLING, TRYHARD_A, TRYHARD_B, TRYHARD_C, SUCCESS};
+enum States {IDLING, TRYHARD_A, TRYHARD_B, TRYHARD_C, TRYHARD_D, SUCCESS};
 
-bool debug_mode = false
-;
+bool debug_mode = false;
 
 void run_mode();
 void read_serial();
@@ -44,13 +43,18 @@ void run_mode() {
         state = SUCCESS;
       }
       break;
-    case TRYHARD_B:       // Joystick check
+    case TRYHARD_B:       // Joystick check jerky
+      if (debug_mode) Serial.println("Joystick state");
+      if (joyUpdate()) {
+        state = SUCCESS;
+      }
+    case TRYHARD_C:       // Joystick check up
       if (debug_mode) Serial.println("Joystick state");
       if (joyUpdate()) {
         state = SUCCESS;
       }
       break;
-    case TRYHARD_C:       // Slider check
+    case TRYHARD_D:       // Slider check
       if (debug_mode) Serial.println("Slider state");
       slider_set_sequence(1);
       if (slider_check()) {
@@ -99,6 +103,11 @@ void read_serial() {
       if (debug_mode) Serial.println("The drill is overheating / humidity");
       humSetBasePt();
       state = TRYHARD_A;
+      break;
+    case 0x11:
+      if (debug_mode) Serial.println("Hit hard cheese / Joystick LRLRLR");
+      joySetSequence(0);
+      state = TRYHARD_C;
       break;
     case 0x12:
       if (debug_mode) Serial.println("Hit hard cheese / Joystick LRLRLR");
