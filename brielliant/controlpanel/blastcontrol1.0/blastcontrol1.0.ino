@@ -131,6 +131,9 @@ void read_serial() {
       if (debug_mode) Serial.println("press all buttons together");
       ledSetState(LED_ACTIVE);
       state = TRYHARD_E;
-      break;      
+      break;
+    case 0x19:
+      state = SUCCESS;
+      break;        
   }
 }

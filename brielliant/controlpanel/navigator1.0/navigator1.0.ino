@@ -138,6 +138,9 @@ void read_serial() {
       slider_select(1);
       slider_set_sequence(0);
       state = TRYHARD_E;
-      break;        
+      break;
+    case 0x19:
+      state = SUCCESS;
+      break;          
   }
 }
