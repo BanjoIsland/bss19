@@ -111,5 +111,8 @@ void read_serial() {
       if (debug_mode) Serial.println("drill is leaking / cover ultrasonic");
       state = TRYHARD_C;
       break;
+    case 0x19:
+      state = SUCCESS;
+      break;
   }
 }

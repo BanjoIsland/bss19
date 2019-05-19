@@ -44,6 +44,7 @@ void run_mode() {
       break;
     case TRYHARD_B:       // button check "B4"
       if (red_check()) {
+        
         state = SUCCESS;
       }
       break;
@@ -99,6 +100,8 @@ void read_serial() {
     case 0x11:
       if (debug_mode) Serial.println("drill is stuck in rind / red button");
       state = TRYHARD_B;
+    case 0x19:
+      state = SUCCESS;
       break;
   }
 }

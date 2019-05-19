@@ -114,5 +114,8 @@ void read_serial() {
       joySetSequence(1);
       state = TRYHARD_B;
       break;
+    case 0x19:
+      state = SUCCESS;
+      break;
   }
 }
