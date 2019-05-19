@@ -91,7 +91,7 @@ void read_serial() {
         if (debug_mode) Serial.println("I'm trying");
         Serial.write((byte)0x00);       //I'm trying hard
       }
-      break;
+      break;\
     case 0x01:        //Identify; return console ID
       Serial.write((byte)CONSOLE_ID);
       if (debug_mode) Serial.println("You requested my ID");

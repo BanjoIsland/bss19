@@ -6,8 +6,7 @@
 const uint8_t CONSOLE_ID = 0x00;
 enum States {IDLING, TRYHARD_A, TRYHARD_B, TRYHARD_C, SUCCESS};
 
-bool debug_mode = false
-;
+bool debug_mode = true;
 
 void run_mode();
 void read_serial();
@@ -30,12 +29,11 @@ void read_serial() {
   if (Serial.available() > 0) {
     if (debug_mode) {
       incoming_byte = Serial.parseInt();
+      Serial.println("buffer size after read = " + String(Serial.available()));
     } else {
       incoming_byte = Serial.read();
     }
   }
-  switch (incoming_byte)
-  {
     if (incoming_byte == (byte) 0x00) {        // State request; return 0x00:idling, 0x01:TRYING HARD
       if (state == IDLING) {
         if (debug_mode) Serial.println("I'm not trying");
@@ -53,9 +51,8 @@ void read_serial() {
     } else {
       long rn = random(10000);
       if (rn % 2 == 0) {   // CONTROL PROBABILITY WITH MODULUS
-      }
         delay (1000);
         Serial.write((byte) 0xFF);
       }
-  }
+    }
 }

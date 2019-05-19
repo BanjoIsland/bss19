@@ -13,7 +13,7 @@
 const uint8_t CONSOLE_ID = 0x02;
 enum States {IDLING, TRYHARD_A, TRYHARD_B, TRYHARD_C, TRYHARD_D, SUCCESS};
 
-bool debug_mode = true;
+bool debug_mode = false;
 
 void run_mode();
 void read_serial();

@@ -21,7 +21,7 @@ void set_encoder_count(uint16_t val) {
 
 bool encoder_check() {
   read_encoder();
-  if (count == target_count) {
+  if (count >= target_count) {
     count = 0;
     prev = count;
     now = prev;
