@@ -10,7 +10,8 @@
 #include "led.h"
 
 const uint8_t CONSOLE_ID = 0x00;
-enum States {IDLING, TRYHARD_A, TRYHARD_B, TRYHARD_C, TRYHARD_D, SUCCESS};
+enum States {IDLING, TRYHARD_A, TRYHARD_B, TRYHARD_C, TRYHARD_D, 
+             TRYHARD_E, SUCCESS};
 
 bool debug_mode = false;
 
@@ -24,11 +25,13 @@ void setup() {
   joySetup(debug_mode);
   humSetup(debug_mode);
   slider_setup(debug_mode);
+  ledSetup();
 }
 
 void loop() {
   run_mode();
-  delay(10);
+  ledUpdate();  
+  delay(1);
 }
 
 void run_mode() {
@@ -36,6 +39,9 @@ void run_mode() {
   switch (state)
   {
     case IDLING:
+      if (ledGetFlashDone()) {
+        ledSetState(LED_IDLE);
+      }
       break;
     case TRYHARD_A:       /// humidity check needs basepoint set in read_serial
       if (debug_mode) Serial.println("Humidity state");
@@ -44,23 +50,25 @@ void run_mode() {
       }
       break;
     case TRYHARD_B:       // Joystick check jerky
-      if (debug_mode) Serial.println("Joystick state");
       if (joyUpdate()) {
         state = SUCCESS;
       }
+      break;
     case TRYHARD_C:       // Joystick check up
-      if (debug_mode) Serial.println("Joystick state");
       if (joyUpdate()) {
         state = SUCCESS;
       }
       break;
     case TRYHARD_D:       // Slider check
-      if (debug_mode) Serial.println("Slider state");
-      slider_set_sequence(1);
       if (slider_check()) {
         state = SUCCESS;
       }
       break;
+    case TRYHARD_E:       // Slider check
+      if (slider_check()) {
+        state = SUCCESS;
+      }
+      break;  
     case SUCCESS:
       Serial.write((byte) 0xFF);
       if (debug_mode) Serial.println("I won");
@@ -86,12 +94,12 @@ void read_serial() {
     case 0x00:        // State request; return 0x00:idling, 0x01:TRYING HARD
       if (state == IDLING) {
         if (debug_mode) Serial.println("I'm not trying");
-        Serial.write((byte)0x01);       //I'm idling
+        Serial.write((byte)0x00);       //I'm idling
       } else {
         if (debug_mode) Serial.println("I'm trying");
-        Serial.write((byte)0x00);       //I'm trying hard
+        Serial.write((byte)0x01);       //I'm trying hard
       }
-      break;\
+      break;
     case 0x01:        //Identify; return console ID
       Serial.write((byte)CONSOLE_ID);
       if (debug_mode) Serial.println("You requested my ID");
@@ -101,21 +109,35 @@ void read_serial() {
       break;
     case 0x10:
       if (debug_mode) Serial.println("The drill is overheating / humidity");
+      ledSetState(LED_FIRE);
       humSetBasePt();
       state = TRYHARD_A;
       break;
     case 0x11:
-      if (debug_mode) Serial.println("Hit hard cheese / Joystick LRLRLR");
+      if (debug_mode) Serial.println("joystick up");
+      ledSetState(LED_ACTIVE);
       joySetSequence(0);
       state = TRYHARD_C;
       break;
     case 0x12:
       if (debug_mode) Serial.println("Hit hard cheese / Joystick LRLRLR");
+      ledSetState(LED_ACTIVE);
       joySetSequence(1);
       state = TRYHARD_B;
       break;
-    case 0x19:
-      state = SUCCESS;
+    case 0x13:
+      if (debug_mode) Serial.println("left slider back and forth");
+      ledSetState(LED_ACTIVE);
+      slider_select(0);
+      slider_set_sequence(1);
+      state = TRYHARD_D;
       break;
+    case 0x14:
+      if (debug_mode) Serial.println("right slider slide up");
+      ledSetState(LED_ACTIVE);
+      slider_select(1);
+      slider_set_sequence(0);
+      state = TRYHARD_E;
+      break;        
   }
 }

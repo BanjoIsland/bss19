@@ -14,8 +14,8 @@ CRGB options[3] = {CRGB::Red, CRGB::Blue, CRGB::Green};
 
 
 
-#define COOLING  55
-#define SPARKING 120
+#define COOLING  20
+#define SPARKING 200
 
 static int flashCount = 3; 
 static bool flashState;
@@ -185,13 +185,23 @@ void ledUpdate()
             break;
         }
         case LED_IDLE: {
-            rainbow();
+            //rainbow();
+            ledPurple();
             break;
         }
+        case LED_ACTIVE: {
+            //rainbow();
+            ledYellow();
+            break;
+        }        
         case LED_VICTORY: {
             Fire2012();
             break;
         }
+        case LED_FIRE: {
+            Fire2012();
+            break;
+        }        
         case LED_FLASH_GREEN:
         {
             flash();
@@ -218,6 +228,20 @@ void ledSetup() {
 void resetLed() {
     for (int i=0; i<NUM_LEDS; i++) {
         leds[i] = CRGB::Black;
+    }
+    FastLED.show();
+}
+
+void ledYellow() {
+    for (int i=0; i<NUM_LEDS; i++) {
+        leds[i] = CRGB::Yellow;
+    }
+    FastLED.show();
+}
+
+void ledPurple() {
+    for (int i=0; i<NUM_LEDS; i++) {
+        leds[i] = CRGB::Purple;
     }
     FastLED.show();
 }

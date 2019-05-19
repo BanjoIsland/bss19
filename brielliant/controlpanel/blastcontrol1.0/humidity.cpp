@@ -36,8 +36,8 @@ bool humCheck()
   float currentHumidity = event.relative_humidity; 
 
   delay(HUM_WAIT_MS);
-  //Serial.println("base is: " + String(humidityBasePt));  
-  //Serial.println("current is: " + String(currentHumidity));
+  Serial.println("base is: " + String(humidityBasePt));  
+  Serial.println("current is: " + String(currentHumidity));
 
   if (currentHumidity > humidityBasePt + HUM_COMPARE) {
     return true;

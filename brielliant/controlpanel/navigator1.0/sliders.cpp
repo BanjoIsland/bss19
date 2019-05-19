@@ -11,6 +11,7 @@ int slider_seq2[] = {0, 3, 0, 3, 0 ,3, 0};
 
 uint8_t slider_seq_iterator = 0;
 uint8_t seq_selected = 0;
+uint8_t slider_selected = 0;
 
 typedef struct seq_struct {
   int *seq;
@@ -31,6 +32,9 @@ void slider_setup(bool mode) {
 void slider_set_sequence(uint8_t seq) {
   seq_selected = seq;
 }
+void slider_select(uint8_t slider) {
+  slider_selected = slider;
+}
 
 int left_level_check() {
 	return analogRead(LEFT_PIN) / 256;
@@ -43,13 +47,20 @@ int right_level_check() {
 bool slider_sequence_check() {
   seq this_seq = seq_list[seq_selected];
   if (slider_seq_iterator < this_seq.num_elements) {
-    int left_level = left_level_check();
+    int curr_level;
+    if (slider_selected == 0) {
+      curr_level = left_level_check(); 
+    } else {
+      curr_level = right_level_check();
+    }
+    
     if (debug_sliders) {
-      Serial.println("left level = " + String(left_level));
+      Serial.println("level = " + String(curr_level));
       Serial.println("iterator = " + String(slider_seq_iterator));
       Serial.println("target = " + String(*(this_seq.seq + slider_seq_iterator)));
+      delay(10);
     }
-    if (left_level == *(this_seq.seq + slider_seq_iterator)) {
+    if (curr_level == *(this_seq.seq + slider_seq_iterator)) {
       slider_seq_iterator += 1;
     }
     return false;
@@ -60,7 +71,6 @@ bool slider_sequence_check() {
 }
 
 bool slider_check() {
-  delay(10);
   if (slider_sequence_check()) {
     return true;
   }

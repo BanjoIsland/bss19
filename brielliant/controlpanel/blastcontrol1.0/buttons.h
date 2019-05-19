@@ -3,20 +3,27 @@
 
 #define BLUE_PIN 9 
 #define YELLOW_PIN 7  
-#define WHITE_PIN 6  
-#define RED_PIN 8
+#define GREEN_PIN 8  
+#define RED_PIN 6
 
-#define SW1_PIN 10
-#define SW2_PIN 16
-#define SW3_PIN A1 
+#define SW1_PIN 3
+#define SW2_PIN 10
+#define SW3_PIN 14 
 
 
 void butSetup();
 
-bool butCheck();
+bool butAllCheck();
 
-bool red_check();
+bool redCheck();
+bool greenCheck();
+bool blueCheck();
+bool yellowCheck();
 
-bool swCheck();
+bool sw1Check();
+bool sw2Check();
+bool sw3Check();
+bool swAllHighCheck();
+bool swAllLowCheck();
 
 #endif

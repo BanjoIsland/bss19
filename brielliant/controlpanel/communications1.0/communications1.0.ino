@@ -11,7 +11,8 @@
 #include "led.h"
 
 const uint8_t CONSOLE_ID = 0x02;
-enum States {IDLING, TRYHARD_A, TRYHARD_B, TRYHARD_C, TRYHARD_D, SUCCESS};
+enum States {IDLING, TRYHARD_A, TRYHARD_B, TRYHARD_C, TRYHARD_D, 
+             TRYHARD_E, SUCCESS};
 
 bool debug_mode = false;
 
@@ -32,7 +33,8 @@ void setup() {
 
 void loop() {
   run_mode();
-  delay(10);
+  ledUpdate();
+  delay(1);
 }
 
 void run_mode() {
@@ -40,6 +42,9 @@ void run_mode() {
   switch (state)
   {
     case IDLING:
+      if (ledGetFlashDone()) {
+        ledSetState(LED_IDLE);
+      }
       break;
     case TRYHARD_A:       // humidity check needs basepoint set in read_serial 
       if (humCheck()) {
@@ -47,17 +52,25 @@ void run_mode() {
       }
       break;
     case TRYHARD_B:       // Encoder state, increment set in read_serial
-      if (encoder_check()) {
+      if (encRotateRightCheck()) {
         state = SUCCESS;
       }
       break;
     case TRYHARD_C:       // ultrasonic state
-      if (ultraCheck()) {
-        state = SUCCESS;  
+      if (encRotateLeftCheck()) {
+        state = SUCCESS;
       }
       break;
-    case TRYHARD_D:       
+    case TRYHARD_D: 
+      if (ultraCheck()) {
+        state = SUCCESS;  
+      }      
       break;
+    case TRYHARD_E: 
+      if (check_dip()) {
+        state = SUCCESS;  
+      }      
+      break;  
     case SUCCESS:
       Serial.write((byte) 0xFF);
       if (debug_mode) Serial.println("I won");
@@ -84,10 +97,10 @@ void read_serial() {
     case 0x00:        // State request; return 0x00:idling, 0x01:TRYING HARD
       if (state == IDLING) {
         if (debug_mode) Serial.println("I'm not trying");
-        Serial.write((byte)0x01);       //I'm idling
+        Serial.write((byte)0x00);       //I'm idling
       } else {
         if (debug_mode) Serial.println("I'm trying");
-        Serial.write((byte)0x00);       //I'm trying hard
+        Serial.write((byte)0x01);       //I'm trying hard
       }
       break;
     case 0x01:        //Identify; return console ID
@@ -99,20 +112,32 @@ void read_serial() {
       break;
     case 0x10:
       if (debug_mode) Serial.println("The drill is overheating / humidity");
+      ledSetState(LED_FIRE);
       humSetBasePt();      
       state = TRYHARD_A;
       break;
     case 0x11:
       if (debug_mode) Serial.println("drill stuck in ring / knob 5 clicks right (1/4 turn)");
       set_encoder_count(5);
+      ledSetState(LED_ACTIVE);
       state = TRYHARD_B;
       break;
+    case 0x12:
+      if (debug_mode) Serial.println("rotate knob left");
+      set_encoder_count(-5);
+      ledSetState(LED_ACTIVE);
+      state = TRYHARD_C;
+      break;      
     case 0x13:
       if (debug_mode) Serial.println("drill is leaking / cover ultrasonic");
-      state = TRYHARD_C;
+      ledSetState(LED_ACTIVE);
+      state = TRYHARD_D;
       break;
-    case 0x19:
-      state = SUCCESS;
-      break;
+    case 0x14:
+      if (debug_mode) Serial.println("dip to 0");
+      ledSetState(LED_ACTIVE);
+      set_dip_target(1);
+      state = TRYHARD_E;
+      break;  
   }
 }

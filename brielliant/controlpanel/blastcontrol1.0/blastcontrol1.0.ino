@@ -9,7 +9,8 @@
 #include "led.h"
 
 const uint8_t CONSOLE_ID = 0x01;
-enum States {IDLING, TRYHARD_A, TRYHARD_B, TRYHARD_C, SUCCESS};
+enum States {IDLING, TRYHARD_A, TRYHARD_B, TRYHARD_C, TRYHARD_D, 
+             TRYHARD_E, SUCCESS};
 
 bool debug_mode = false;
 
@@ -28,7 +29,8 @@ void setup() {
 
 void loop() {
   run_mode();
-  delay(10);
+  ledUpdate();
+  delay(1);
 }
 
 void run_mode() {
@@ -36,6 +38,9 @@ void run_mode() {
   switch (state)
   {
     case IDLING:
+      if (ledGetFlashDone()) {
+        ledSetState(LED_IDLE);
+      }
       break;
     case TRYHARD_A:       // humidity check needs basepoint set in read_serial
       if (humCheck()) {
@@ -43,21 +48,30 @@ void run_mode() {
       }
       break;
     case TRYHARD_B:       // button check "B4"
-      if (red_check()) {
-        
+      if (redCheck()) {
         state = SUCCESS;
       }
       break;
     case TRYHARD_C:       // switch check
-      if (swCheck()) {
+      if (swAllHighCheck()) {
         state = SUCCESS;   
       }
       break;
+    case TRYHARD_D:       // switch check
+      if (swAllLowCheck()) {
+        state = SUCCESS;   
+      }
+      break; 
+    case TRYHARD_E:       // switch check
+      if (butAllCheck()) {
+        state = SUCCESS;   
+      }
+      break;        
     case SUCCESS:
-      Serial.write((byte) 0xFF);
+      Serial.write((byte) 0xFF); // So this happens at time 0
       if (debug_mode) Serial.println("I won");
       state = IDLING;
-      setFlashCount(3);
+      setFlashCount(3); // I think the LED code is blocking
       ledSetState(LED_FLASH_GREEN);
       break;
       
@@ -79,10 +93,10 @@ void read_serial() {
     case 0x00:        // State request; return 0x00:idling, 0x01:TRYING HARD
       if (state == IDLING) {
         if (debug_mode) Serial.println("I'm not trying");
-        Serial.write((byte)0x01);       //I'm idling
+        Serial.write((byte)0x00);       //I'm idling
       } else {
         if (debug_mode) Serial.println("I'm trying");
-        Serial.write((byte)0x00);       //I'm trying hard
+        Serial.write((byte)0x01);       //I'm trying hard
       }
       break;
     case 0x01:        //Identify; return console ID
@@ -94,14 +108,29 @@ void read_serial() {
       break;
     case 0x10:
       if (debug_mode) Serial.println("drill is overheating / humidity");
+      ledSetState(LED_FIRE);
       humSetBasePt();
       state = TRYHARD_A;
       break;
     case 0x11:
       if (debug_mode) Serial.println("drill is stuck in rind / red button");
+      ledSetState(LED_ACTIVE);
       state = TRYHARD_B;
-    case 0x19:
-      state = SUCCESS;
       break;
+    case 0x12:
+      if (debug_mode) Serial.println("check all sw high");
+      ledSetState(LED_ACTIVE);
+      state = TRYHARD_C;
+      break;
+    case 0x13:
+      if (debug_mode) Serial.println("check all sw low");
+      ledSetState(LED_ACTIVE);
+      state = TRYHARD_D;
+      break;
+    case 0x14:
+      if (debug_mode) Serial.println("press all buttons together");
+      ledSetState(LED_ACTIVE);
+      state = TRYHARD_E;
+      break;      
   }
 }
