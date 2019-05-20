@@ -122,23 +122,23 @@ void read_serial() {
       ledSetState(LED_ACTIVE);
       state = TRYHARD_B;
       break;
-    case 0x12:
-      if (debug_mode) Serial.println("rotate knob left");
-      set_encoder_count(-5);
-      ledSetState(LED_ACTIVE);
-      state = TRYHARD_C;
-      break;      
+//    case 0x12:
+//      if (debug_mode) Serial.println("rotate knob left");
+//      set_encoder_count(-5);
+//      ledSetState(LED_ACTIVE);
+//      state = TRYHARD_C;
+//      break;      
     case 0x13:
       if (debug_mode) Serial.println("drill is leaking / cover ultrasonic");
       ledSetState(LED_ACTIVE);
       state = TRYHARD_D;
       break;
-    case 0x14:
-      if (debug_mode) Serial.println("dip to 0");
-      ledSetState(LED_ACTIVE);
-      set_dip_target(1);
-      state = TRYHARD_E;
-      break;
+//    case 0x14:
+//      if (debug_mode) Serial.println("dip to 0");
+//      ledSetState(LED_ACTIVE);
+//      set_dip_target(1);
+//      state = TRYHARD_E;
+//      break;
     case 0x19:
       state = SUCCESS;
       break;  

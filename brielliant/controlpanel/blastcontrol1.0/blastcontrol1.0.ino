@@ -117,16 +117,16 @@ void read_serial() {
       ledSetState(LED_ACTIVE);
       state = TRYHARD_B;
       break;
-    case 0x12:
-      if (debug_mode) Serial.println("check all sw high");
-      ledSetState(LED_ACTIVE);
-      state = TRYHARD_C;
-      break;
+//    case 0x12:
+//      if (debug_mode) Serial.println("check all sw high");
+//      ledSetState(LED_ACTIVE);
+//      state = TRYHARD_C;
+//      break;
     case 0x13:
-      if (debug_mode) Serial.println("check all sw low");
-      ledSetState(LED_ACTIVE);
-      state = TRYHARD_D;
-      break;
+//      if (debug_mode) Serial.println("check all sw low");
+//      ledSetState(LED_ACTIVE);
+//      state = TRYHARD_D;
+//      break;
     case 0x14:
       if (debug_mode) Serial.println("press all buttons together");
       ledSetState(LED_ACTIVE);
