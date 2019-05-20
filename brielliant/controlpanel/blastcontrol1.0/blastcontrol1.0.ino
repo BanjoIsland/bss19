@@ -62,8 +62,8 @@ void run_mode() {
         state = SUCCESS;   
       }
       break; 
-    case TRYHARD_E:       // switch check
-      if (butAllCheck()) {
+    case TRYHARD_E:       // whey lake, prime curds and lactate
+      if (curd_primer() && lactation()) {
         state = SUCCESS;   
       }
       break;        
@@ -122,13 +122,13 @@ void read_serial() {
 //      ledSetState(LED_ACTIVE);
 //      state = TRYHARD_C;
 //      break;
-    case 0x13:
+//    case 0x13:
 //      if (debug_mode) Serial.println("check all sw low");
 //      ledSetState(LED_ACTIVE);
 //      state = TRYHARD_D;
 //      break;
     case 0x14:
-      if (debug_mode) Serial.println("press all buttons together");
+      if (debug_mode) Serial.println("whey lake");
       ledSetState(LED_ACTIVE);
       state = TRYHARD_E;
       break;

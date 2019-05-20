@@ -117,8 +117,8 @@ void read_serial() {
       state = TRYHARD_A;
       break;
     case 0x11:
-      if (debug_mode) Serial.println("drill stuck in rind / knob 5 clicks right (1/4 turn)");
-      set_encoder_count(5);
+      if (debug_mode) Serial.println("drill stuck in rind / knob full turn right");
+      set_encoder_count(20);
       ledSetState(LED_ACTIVE);
       state = TRYHARD_B;
       break;

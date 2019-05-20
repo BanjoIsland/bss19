@@ -26,4 +26,7 @@ bool sw3Check();
 bool swAllHighCheck();
 bool swAllLowCheck();
 
+int curd_primer();
+int lactation();
+
 #endif

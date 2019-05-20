@@ -19,7 +19,7 @@ void encoder_setup(bool mode) {
 }
 
 void set_encoder_count(uint16_t val) {
-  target_count = val * 4;
+  target_count = val;
 }
 
 bool encoder_check() {

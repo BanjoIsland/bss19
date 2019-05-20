@@ -3,11 +3,11 @@
 
 void butSetup() {
   pinMode(BLUE_PIN, INPUT_PULLUP);
-  pinMode(YELLOW_PIN, INPUT_PULLUP);
+  pinMode(YELLOW_PIN, INPUT_PULLUP); //curd rockets
   pinMode(GREEN_PIN, INPUT_PULLUP);
   pinMode(RED_PIN, INPUT_PULLUP);
 
-  pinMode(SW1_PIN, INPUT);
+  pinMode(SW1_PIN, INPUT); //curd primer
   pinMode(SW2_PIN, INPUT);
   pinMode(SW3_PIN, INPUT);
 }
@@ -77,4 +77,12 @@ bool swAllLowCheck() {
   } else {
     return false;
   }  
+}
+
+int curd_primer() {
+  return digitalRead(SW1_PIN);
+}
+
+int lactation() {
+  return !digitalRead(YELLOW_PIN);
 }

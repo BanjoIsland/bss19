@@ -6,7 +6,7 @@
 bool debug_sliders = false;
 
 //new slider sequences must be instantiated into the seq_struct array to be used.
-int  slider_seq1[] = {0, 1, 2, 3};
+int  slider_seq1[] = {1};
 int slider_seq2[] = {0, 3, 0, 3, 0 ,3, 0};
 
 uint8_t slider_seq_iterator = 0;
