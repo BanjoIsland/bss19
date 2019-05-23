@@ -53,12 +53,12 @@ void run_mode() {
       }
       break;
     case TRYHARD_C:       // switch check
-      if (swAllHighCheck()) {
+      if (fondue_heater()) {
         state = SUCCESS;   
       }
       break;
     case TRYHARD_D:       // switch check
-      if (swAllLowCheck()) {
+      if (acid_attack()) {
         state = SUCCESS;   
       }
       break; 
@@ -117,22 +117,23 @@ void read_serial() {
       ledSetState(LED_ACTIVE);
       state = TRYHARD_B;
       break;
-//    case 0x12:
-//      if (debug_mode) Serial.println("check all sw high");
-//      ledSetState(LED_ACTIVE);
-//      state = TRYHARD_C;
-//      break;
-//    case 0x13:
-//      if (debug_mode) Serial.println("check all sw low");
-//      ledSetState(LED_ACTIVE);
-//      state = TRYHARD_D;
-//      break;
+    case 0x12:
+      if (debug_mode) Serial.println("hard cheese / fondue heater");
+      ledSetState(LED_ACTIVE);
+      state = TRYHARD_C;
+      break;
+    case 0x13:
+      if (debug_mode) Serial.println("gaeous cheese/ initiate acid counterattack");
+      ledSetState(LED_ACTIVE);
+      state = TRYHARD_D;
+      break;
     case 0x14:
-      if (debug_mode) Serial.println("whey lake");
+      if (debug_mode) Serial.println("whey lake / cheese curdler and lactate");
       ledSetState(LED_ACTIVE);
       state = TRYHARD_E;
       break;
     case 0x19:
+      delay(10000);
       state = SUCCESS;
       break;        
   }

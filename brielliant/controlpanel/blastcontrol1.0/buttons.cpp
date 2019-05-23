@@ -86,3 +86,11 @@ int curd_primer() {
 int lactation() {
   return !digitalRead(YELLOW_PIN);
 }
+
+int fondue_heater() {
+  return digitalRead(SW3_PIN);
+}
+
+int acid_attack() {
+  return !digitalRead(GREEN_PIN);
+}

@@ -4,7 +4,7 @@
 uint8_t target_dip_state;
 bool debug_pin = false;
 
-uint16_t dip_states[] = {1, 3, 7};
+uint16_t dip_states[] = {0, 3, 7};
 
 void dip_setup(bool mode) {
   debug_pin = mode;

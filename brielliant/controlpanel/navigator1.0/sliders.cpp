@@ -8,6 +8,7 @@ bool debug_sliders = false;
 //new slider sequences must be instantiated into the seq_struct array to be used.
 int  slider_seq1[] = {1};
 int slider_seq2[] = {0, 3, 0, 3, 0 ,3, 0};
+int slider_seq3[] = {0};
 
 uint8_t slider_seq_iterator = 0;
 uint8_t seq_selected = 0;
@@ -18,10 +19,11 @@ typedef struct seq_struct {
   int num_elements;
 } seq;
 
-seq seq_list[2] =
+seq seq_list[3] =
 {
   {slider_seq1, NUMELEMENTS(slider_seq1)},
-  {slider_seq2, NUMELEMENTS(slider_seq2)}
+  {slider_seq2, NUMELEMENTS(slider_seq2)},
+  {slider_seq3, NUMELEMENTS(slider_seq3)}
 };
 
 void slider_setup(bool mode) {

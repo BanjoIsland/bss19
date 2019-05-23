@@ -114,7 +114,7 @@ void read_serial() {
       state = TRYHARD_A;
       break;
     case 0x11:
-      if (debug_mode) Serial.println("joystick up");
+      if (debug_mode) Serial.println("drill stuck in rind / joystick up");
       ledSetState(LED_ACTIVE);
       joySetSequence(0);
       state = TRYHARD_C;
@@ -125,21 +125,22 @@ void read_serial() {
       joySetSequence(1);
       state = TRYHARD_B;
       break;
-//    case 0x13:
-//      if (debug_mode) Serial.println("left slider back and forth");
-//      ledSetState(LED_ACTIVE);
-//      slider_select(0);
-//      slider_set_sequence(1);
-//      state = TRYHARD_D;
-//      break;
+    case 0x13:
+      if (debug_mode) Serial.println("gaseous cheese / turn down engines");
+      ledSetState(LED_ACTIVE);
+      slider_select(0);
+      slider_set_sequence(2);
+      state = TRYHARD_D;
+      break;
     case 0x14:
-      if (debug_mode) Serial.println("both sliders to 40%");
+      if (debug_mode) Serial.println("whey lake / both sliders to 40%");
       ledSetState(LED_ACTIVE);
       slider_select(1);
       slider_set_sequence(0);
       state = TRYHARD_E;
       break;
     case 0x19:
+      delay(10000);
       state = SUCCESS;
       break;          
   }
