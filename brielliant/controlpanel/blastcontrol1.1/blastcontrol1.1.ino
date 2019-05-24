@@ -81,7 +81,7 @@ void run_mode() {
       state = SUCCESS;
       break;         
     case SUCCESS:
-      Serial.write((byte) 0xFF); // So this happens at time 0
+      Serial.write((byte) 0xFF); // So this
       if (debug_mode) Serial.println("I won");
       state = IDLING;
       setFlashCount(3); // I think the LED code is blocking

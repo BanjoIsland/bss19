@@ -159,8 +159,8 @@ void read_serial() {
       break;
     case 0x15:
       ledSetState(LED_ACTIVE);
-      slider_select(0);
-      slider_set_sequence(2);
+      slider_select(1);
+      slider_set_sequence(3);
       state = FERMENTATION0;
       break;
     case 0x16:
