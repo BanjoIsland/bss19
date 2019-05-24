@@ -1,7 +1,7 @@
 /*
-  Gametech, pilot demolitions officer controller
+  Gametech, Blast Officer controller v1.1
   Author: Ryan Williams
-  Revised: 5.12.2019
+  Revised: 5.23.2019
 */
 
 #include "humidity.h"
@@ -9,8 +9,8 @@
 #include "led.h"
 
 const uint8_t CONSOLE_ID = 0x01;
-enum States {IDLING, SWISSHOLES, CFOUR, FONDUE, ACIDATTACK, 
-             LACTATE_CURD, PASSTHROUGH, SUCCESS};
+enum States {IDLING, INIT, SWISSHOLES, CFOUR, FONDUEON, ACIDATTACK, 
+             LACTATE_CURD, FONDUEOFF, PASSTHROUGH, SUCCESS};
 
 bool debug_mode = false;
 
@@ -52,7 +52,7 @@ void run_mode() {
         state = SUCCESS;
       }
       break;
-    case FONDUE:       // switch check
+    case FONDUEON:       // switch check
       if (fondue_heater()) {
         state = SUCCESS;   
       }
@@ -65,6 +65,16 @@ void run_mode() {
     case LACTATE_CURD:       // whey lake, prime curds and lactate
       if (curd_primer() && lactation()) {
         state = SUCCESS;   
+      }
+      break;
+    case FONDUEOFF:       // switch check
+      if (!fondue_heater()) {
+        state = SUCCESS;   
+      }
+      break;
+    case INIT:
+      if (!fondue_heater() && !curd_primer() && !enzymatic()) {
+        state = SUCCESS;
       }
       break;
     case PASSTHROUGH:       // All fake actions are passthroughs
@@ -121,9 +131,9 @@ void read_serial() {
       state = CFOUR;
       break;
     case 0x12:
-      if (debug_mode) Serial.println("hard cheese / fondue heater");
+      if (debug_mode) Serial.println("hard cheese / FONDUEON heater");
       ledSetState(LED_ACTIVE);
-      state = FONDUE;
+      state = FONDUEON;
       break;
     case 0x13:
       if (debug_mode) Serial.println("gaeous cheese/ initiate acid counterattack");
@@ -134,6 +144,18 @@ void read_serial() {
       if (debug_mode) Serial.println("whey lake / cheese curdler and lactate");
       ledSetState(LED_ACTIVE);
       state = LACTATE_CURD;
+      break;
+    case 0x15:
+      if (debug_mode) Serial.println("closing on target / FONDUEoff");
+      ledSetState(LED_ACTIVE);
+      state = FONDUEOFF;
+      break;
+    case 0x16:
+      state = PASSTHROUGH;
+      break;
+    case 0x17:
+      ledSetState(LED_ACTIVE);
+      state = INIT;
       break;
     case 0x19:
       state = PASSTHROUGH;

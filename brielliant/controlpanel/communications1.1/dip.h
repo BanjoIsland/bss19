@@ -11,6 +11,8 @@ void set_dip_target(uint16_t state);
 
 bool check_dip();
 
+bool check_smiley();
+
 uint16_t read_dip();
 
 #endif

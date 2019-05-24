@@ -30,5 +30,6 @@ int curd_primer();
 int lactation();
 int fondue_heater();
 int acid_attack();
+int enzymatic();
 
 #endif

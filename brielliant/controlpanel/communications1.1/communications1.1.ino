@@ -1,7 +1,7 @@
 /*
-  BSS19 Gametech, communications officer controller v1.0
+  Gametech, communications officer controller v1.1
   Author: Ryan Williams
-  Revised: 5.13.2019
+  Revised: 5.23.2019
 */
 
 #include "humidity.h"
@@ -11,8 +11,8 @@
 #include "led.h"
 
 const uint8_t CONSOLE_ID = 0x02;
-enum States {IDLING, SWISSHOLES, YEASTUP, YEASTDOWN, WAFTAWAY, 
-             DIPS0, PASSTHROUGH, SUCCESS};
+enum States {IDLING, INIT, SWISSHOLES, YEASTUP, YEASTDOWN, WAFTAWAY, 
+             DIPS0, DIPSMILEY, PASSTHROUGH, SUCCESS};
 
 bool debug_mode = false;
 
@@ -70,6 +70,16 @@ void run_mode() {
       if (check_dip()) {
         state = SUCCESS;  
       }      
+      break;
+    case DIPSMILEY: 
+      if (check_smiley()) {
+        state = SUCCESS;  
+      }      
+      break;
+    case INIT:
+      if (check_dip()) {
+        state = SUCCESS;
+      }
       break;
     case PASSTHROUGH:       // All fake actions are passthroughs
       state = SUCCESS;
@@ -141,6 +151,18 @@ void read_serial() {
       ledSetState(LED_ACTIVE);
       set_dip_target(0);
       state = DIPS0;
+      break;
+    case 0x15:
+      ledSetState(LED_ACTIVE);
+      set_dip_target(3);
+      state = DIPSMILEY;
+    case 0x16:
+      state = PASSTHROUGH;
+      break;
+    case 0x17:
+      ledSetState(LED_ACTIVE);
+      set_dip_target(4);
+      state = INIT;
       break;
     case 0x19:
       state = PASSTHROUGH;

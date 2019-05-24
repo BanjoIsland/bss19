@@ -4,7 +4,8 @@
 uint8_t target_dip_state;
 bool debug_pin = false;
 
-uint16_t dip_states[] = {0, 3, 7};
+uint16_t smiley = 1 << 10 + 1 << 6 + 1 << 5 + 1;
+uint16_t dip_states[] = {0, 3, 7, smiley, 1023};
 
 void dip_setup(bool mode) {
   debug_pin = mode;
@@ -19,6 +20,14 @@ void set_dip_target(uint16_t state) {
 
 bool check_dip() {
   if (read_dip() == (uint16_t) target_dip_state) {
+    return true;
+  }
+  return false;
+}
+
+bool check_smiley() {
+  uint16_t dip = read_dip();
+  if (dip & 0x0279 == 0x0279) { // = 0b1001111001 
     return true;
   }
   return false;

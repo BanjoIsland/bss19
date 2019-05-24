@@ -6,7 +6,7 @@
 // To add more sequences, add NUMSEQUENCES, create joySeqx array below, 
 // and add to joySeqMatrix
 #define NUMSEQUENCES 3
-int joySeq1[] = {UP};
+int joySeq1[] = {DOWN};
 int joySeq2[] = {LEFT, CENTER, RIGHT, CENTER, LEFT, CENTER, RIGHT, CENTER, 
                  LEFT, CENTER, RIGHT, CENTER, LEFT, CENTER, RIGHT};
 int joySeq3[] = {UP, CENTER, UP, CENTER, DOWN, CENTER, DOWN, CENTER,

@@ -1,7 +1,7 @@
 /*
-  Gametech, pilot navigator controller
+  Gametech, Navigation Officer controller v1.1
   Author: Ryan Williams
-  Revised: 5.12.2019
+  Revised: 5.23.2019
 */
 
 #include "joystick.h"
@@ -10,11 +10,11 @@
 #include "led.h"
 
 const uint8_t CONSOLE_ID = 0x00;
-enum States {IDLING, SWISSHOLES, JOYLRLRLR, PULLBACK, MOISTURE60, 
-             MOISTURE40, PASSTHROUGH, SUCCESS};
+enum States {IDLING, INIT, SWISSHOLES, JOYLRLRLR, PULLBACK, MOISTURE60, 
+             MOISTURE30, FERMENTATION0, MAKEYMAKEY, PASSTHROUGH, SUCCESS};
 
 bool debug_mode = false;
-
+uint8_t makey_pin = 2;   //SET THIS FOR MAKEYMAKEY!
 void run_mode();
 void read_serial();
 
@@ -26,6 +26,7 @@ void setup() {
   humSetup(debug_mode);
   slider_setup(debug_mode);
   ledSetup();
+  pinMode(makey_pin, OUTPUT);
 }
 
 void loop() {
@@ -63,7 +64,22 @@ void run_mode() {
         state = SUCCESS;
       }
       break;
-    case MOISTURE40:       // Slider check
+    case MOISTURE30:       // Slider check
+      if (slider_check()) {
+        state = SUCCESS;
+      }
+      break;
+    case FERMENTATION0:
+      if (slider_check()) {
+        state = SUCCESS;
+      }
+      break;
+    case MAKEYMAKEY:
+      if (digitalRead(makey_pin)) {
+        state = SUCCESS;
+      }
+      break;
+    case INIT:
       if (slider_check()) {
         state = SUCCESS;
       }
@@ -137,9 +153,25 @@ void read_serial() {
     case 0x14:
       if (debug_mode) Serial.println("whey lake / both sliders to 40%");
       ledSetState(LED_ACTIVE);
-      slider_select(1);
+      slider_select(0);
       slider_set_sequence(0);
-      state = MOISTURE40;
+      state = MOISTURE30;
+      break;
+    case 0x15:
+      ledSetState(LED_ACTIVE);
+      slider_select(0);
+      slider_set_sequence(2);
+      state = FERMENTATION0;
+      break;
+    case 0x16:
+      ledSetState(LED_ACTIVE);
+      state = MAKEYMAKEY;
+      break;
+    case 0x17:
+      ledSetState(LED_ACTIVE);
+      slider_select(1);
+      slider_set_sequence(1);
+      state = INIT;
       break;
     case 0x19:
       state = PASSTHROUGH;

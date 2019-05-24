@@ -94,3 +94,7 @@ int fondue_heater() {
 int acid_attack() {
   return !digitalRead(GREEN_PIN);
 }
+
+int enzymatic() {
+  return !digitalRead(SW2_PIN);
+}
