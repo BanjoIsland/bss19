@@ -96,5 +96,5 @@ int acid_attack() {
 }
 
 int enzymatic() {
-  return !digitalRead(SW2_PIN);
+  return digitalRead(SW2_PIN);
 }

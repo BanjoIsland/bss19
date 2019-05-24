@@ -73,6 +73,11 @@ void run_mode() {
       }
       break;
     case INIT:
+      if (debug_mode) {
+        Serial.println("curd: " + String(curd_primer()));
+        Serial.println("enz: " + String(enzymatic()));
+        Serial.println("fondue: " + String(fondue_heater()));
+      }
       if (!fondue_heater() && !curd_primer() && !enzymatic()) {
         state = SUCCESS;
       }

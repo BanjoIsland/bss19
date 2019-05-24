@@ -61,6 +61,7 @@ bool encRotateRightCheck() {
 
 bool encRotateLeftCheck() {
   encReadCount();
+  if (debug_encoder) Serial.println("encoder: " + String(count));
   if (count <= target_count) {
     count = 0;
     prev = count;

@@ -56,7 +56,7 @@ void run_mode() {
         state = SUCCESS;
       }
       break;
-    case YEASTDOWN:       // ultrasonic state
+    case YEASTDOWN:      
       if (encRotateLeftCheck()) {
         state = SUCCESS;
       }
@@ -137,7 +137,7 @@ void read_serial() {
       break;
     case 0x12:
       if (debug_mode) Serial.println("hard cheese / rotate knob left");
-      set_dip_target(2);
+      set_encoder_count(-20);
       ledSetState(LED_ACTIVE);
       state = YEASTDOWN;
       break;      
@@ -153,9 +153,11 @@ void read_serial() {
       state = DIPS0;
       break;
     case 0x15:
+      if (debug_mode) Serial.println("dip smiley or wut");
       ledSetState(LED_ACTIVE);
       set_dip_target(3);
       state = DIPSMILEY;
+      break;
     case 0x16:
       state = PASSTHROUGH;
       break;
